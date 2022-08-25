@@ -1,0 +1,60 @@
+asg BstAdtASG {
+    adt = BstADT
+    impl = BstIMP
+
+    group Find {
+        tests Value {
+            base1: <b,a,c>.find(a) == true;
+            base2: <b,a,c>.find(b) == true;
+            base3: <b,a,c>.find(c) == true;
+            failToFind: <b,a,c>.find(d) == false;
+            emptyFail: <>.find(a) == false;
+        }
+    }
+
+    group Insert {
+        tests State {
+            dupe1: <b,a,c>.insert(a) -> <b,a,c>;
+            dupe2: <b,a,c>.insert(b) -> <b,a,c>;
+            dupe3: <b,a,c>.insert(c) -> <b,a,c>;
+            base1: <b,a,c>.insert(d) -> <b,a,c,d>; // test probably right
+            base2: <y,x,z>.insert(d) -> <y,x,d,z>;
+
+        }
+        tests Exceptions {
+            null: <b,a,c>.insert(null) !! NoSuchElementException;
+            oddChar1: <b,a,c>.insert(x) !! NoSuchElementException; //x="<"
+            oddChar2: <b,a,c>.insert(x) !! NoSuchElementException; //x=","
+
+        }
+    }
+
+    group Pre {
+        tests Value {
+            empty: <>.pre() == "";
+            base1: <a,b,c>.pre() == "b,a,c"
+            base2: <x,y,z>.pre() == "y,x,z"
+        }
+    }
+
+    group Remove {
+        tests State {
+            base1: <b,a,c>.remove(a) -> <b,c>;
+            base2: <b,a,c>.remove(b) -> <a,c>;
+            base3: <b,a,c>.remove(c) -> <a,b>;
+            notPresent: <b,a,c>.remove(d) -> <b,a,c>;
+            empty: <>.remove(d) -> <>;
+        }
+    }
+
+    group toString {
+        tests Value {
+            base1: <b,a,c>.toString() == "<b,a,c>";
+            base2: <a,b>.toString() == "<a,b>";
+            base3: <a>.toString() == "<a>"
+            empty: <>.toString() == "<>";
+
+        }
+
+    }
+}
