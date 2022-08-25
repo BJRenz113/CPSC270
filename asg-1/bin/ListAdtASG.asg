@@ -1,0 +1,71 @@
+asg ListAdtASG {
+	adt = ListADT
+	impl = ListIMP
+	
+	group equals {  
+	    tests Value{
+	        equal: <'a','b'|'c'>.equals(<'a','b'|'c'>) == true;
+	        notEqualCursor: <'a','b'|'c'>.equals(<'a'|'b','c'>) == false;
+	        notEqualEle: <'a','b'|'c'>.equals(<'a','d'|'c'>) == false;
+	        notEqualOrder: <'a','b'|'c'>.equals(<'b','c'|'a'>) == false;
+	    }
+	}
+	
+	group get { 
+	    tests Value{
+	        basicGet: <'a','b'|'c'>.get() == 'c';
+	    } 
+	    tests Exceptions{
+	        nul: <|>.get() !! NoSuchElementException;
+	    }
+    }
+    
+    group insert {  
+        tests State {
+           basicInsert: <'a','b'|'c'>.insert('d') -> <'a','b','d','c'>;
+           impossibleInsert: <'a','b','c'|>.insert('d') -> <'a','b','c'|>;
+        }
+    }
+    
+    group next { 
+        tests State {
+            basicNext: <'a','b'|'c'>.next() -> <'a','b','c'|>;
+        } 
+        tests Value {
+            impossibleNext: <'a','b','c'|>.next() == false;
+        }
+    }
+    
+    group prev {
+        tests State {
+            basicPrev: <'a','b'|'c'>.prev() -> <'a'|'b','c'>;
+        }  
+        tests Value{
+            impossiblePrev: <|'a','b','c'>.prev() == false;
+        }
+    }
+    
+    group remove {
+        tests State {
+            basicRemove: <'a'|'b'>.remove() -> <'a'|>;
+            impossibleRemove: <'a','b'|>.remove() -> <'a','b'|>;
+        }
+    }
+    
+    group subList { 
+        tests Value {
+            basicSubList: <'a','b'|'c','d'>.subList(1,3) == <|'b','c'>;
+            basicSubList2: <'w'|,'x','y','z'>.subList(1,3) == <|'x','y'>;
+        } 
+    }
+    
+    group toString { 
+        tests Value{
+            basicToString: <'a','b'|'c'>.toString() == "<a,b|c>"
+            emptyToString: <|>.toString() == "<|>"
+        }
+
+    }
+    
+	
+}
