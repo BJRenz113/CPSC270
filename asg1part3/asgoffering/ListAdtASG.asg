@@ -1,0 +1,88 @@
+asg ListAdtASG {
+	adt = ListADT
+	impl = ListIMP
+	
+	group Equals {  
+	    tests Value{
+	        equal: <a,b|c>.equals(x) == true; //x= <a,b|c>
+	        notEqualCursor: <a,b|c>.equals(x) == false; //x= <a|b,c>
+	        notEqualNum: <a,b|c>.equals(x) == false; //x= <|a,b>
+	        notEqualNum2: <a,b|c>.equals(x) == false; //x= <|a,b,c,d>
+	        notEqualEle: <a,b|c>.equals(x) == false; //x=<a,d|c>
+	        notEqualOrder: <a,b|c>.equals(x) == false; //x=<b,c|a>
+	    }
+	}
+	
+	group Get { 
+	    
+	    tests Value{
+	        basicGet1: <|a,b,c>.get() == a;
+	        basicGet2: <a|b,c>.get() == b;
+	        basicGet3: <a,b|c>.get() == c;
+	    } 
+	    tests Exceptions{
+	        null: <|>.get() !! NoSuchElementException;
+	        notPossible: <a,b,c|>.get() !! NoSuchElementException;
+	    }
+    }
+    
+    group Insert {  
+        tests State {
+           basicInsert: <a,b|c>.insert(d) -> <a,b|d,c>;
+           frontInsert: <|a,b,c>.insert(d) -> <|d,a,b,c>;
+           lastInsert: <a,b,c|>.insert(d) -> <a,b,c|>;
+           
+        }
+    }
+    
+    group Next { 
+        tests State {
+            basicNext1: <|a,b,c>.next() -> <a|b,c>;
+            basicNext2: <a|b,c>.next() -> <a,b|c>;
+            basicNext3: <a,b|c>.next() -> <a,b,c|>;
+        } 
+        tests Value {
+            possibleNext: <a,b|c>.next() == true;
+            impossibleNext: <a,b,c|>.next() == false;
+        }
+    }
+    
+    group Prev {
+        tests State {
+            basicPrev1: <a,b,c|>.prev() -> <a,b|c>;
+            basicPrev2: <a,b|c>.prev() -> <a|b,c>;
+            basicPrev3: <a|b,c>.prev() -> <|a,b,c>;
+        }  
+        tests Value{
+            possiblePrev: <a,b,c|>.prev() == true;
+            impossiblePrev: <|a,b,c>.prev() == false;
+        }
+    }
+    
+    group Remove {
+        tests State {
+            basicRemove1: <a|b>.remove() -> <a|>;
+            basicRemove2: <|a,b>.remove() -> <|b>;
+            impossibleRemove: <a,b|>.remove() -> <a,b|>;
+        }
+    }
+    
+    group SubList { 
+        tests Value {
+            basicSubList: <a,b|c,d>.subList(1,3) == x;          //x=<|'b','c'>;
+            basicSubList2: <w|x,y,z>.subList(1,3) ==  x;      //x=<|'x','y'>;
+        } 
+    }
+    
+    group ToString { 
+        tests Value{
+            basicToString1: <a,b|c>.toString() == "<a,b|c>";
+            basicToString2: <|a,b>.toString() == "<|a,b>";
+            basicToString3: <a,b,c|>.toString() == "<a,b,c|>";
+            emptyToString: <|>.toString() == "<|>";
+        }
+
+    }
+    
+	
+}
